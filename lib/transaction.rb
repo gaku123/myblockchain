@@ -7,6 +7,18 @@ class Transaction
     new(inputs: inputs, outputs: outputs)
   end
 
+  def self.create_transaction(hashs, to_and_coin_values)
+    outputs = Array.new
+    to_and_coin_values.each do |to_and_cv|
+      outputs << Output.new(to: to_and_cv[:to], coin_value: to_and_cv[:coin_value])
+    end
+    inputs = Array.new
+    hashs.each do |hash|
+      inputs << Input.new(hash: hash)
+    end
+    new(inputs: inputs, outputs: outputs)
+  end
+
   def initialize(args)
     @inputs = args[:inputs]
     @outputs = args[:outputs]
@@ -27,6 +39,14 @@ class Transaction
       return true if output.to == id
     end
     return false
+  end
+
+  def sum_of_coin_to(id)
+    sum = 0
+    @outputs.each do |output|
+      sum += output.coin_value.to_i if output.to == id
+    end
+    sum
   end
 
   def used_as_input?(hash)
@@ -62,7 +82,7 @@ class Transaction
   end
 
   class Output
-  attr_reader :to
+  attr_reader :to, :coin_value
 
     def initialize(args)
       @to = args[:to]

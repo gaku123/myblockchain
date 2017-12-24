@@ -26,5 +26,4 @@ class Blockchain
     end
     string
   end
-
 end
