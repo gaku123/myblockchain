@@ -12,6 +12,13 @@ class Blockchain
     txs.flatten
   end
 
+  def used_as_input?(hash)
+    @blockchain.each do |block|
+      return true if block.used_as_input?(hash) == true
+    end
+    false
+  end
+
   def to_s
     string = ""
     @blockchain.each do |block|

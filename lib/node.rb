@@ -11,7 +11,17 @@ class Node
   end
 
   def wallet(id)
-    @blockchain.get_all_transaction_to(id)
+    txs = @blockchain.get_all_transaction_to(id)
+    txs.reject do |tx|
+      @blockchain.used_as_input?(tx.hash)
+    end
+  end
+
+  def send(target, coin)
+    txs = wallet(@id)
+    txs.each do |tx|
+      puts "#{@id} to #{tx.hash} #{coin} coin"
+    end
   end
 
   def to_s

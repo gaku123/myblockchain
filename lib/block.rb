@@ -17,6 +17,13 @@ class Block
     end
   end
 
+  def used_as_input?(hash)
+    @transactions.each do |tx|
+      return true if tx.used_as_input?(hash) == true
+    end
+    false
+  end
+
   def to_s
     <<~EOS.chomp
       timestamp : #{@timestamp}

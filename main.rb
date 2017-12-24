@@ -10,7 +10,7 @@ class BCSimulator < Thor
   def create(num_of_nodes=100)
     @@nodes = Array.new
     num_of_nodes.to_i.times do |id|
-      @@nodes << Node.new(id)
+      @@nodes << Node.new(id.to_s)
     end
   end
 
@@ -22,9 +22,9 @@ class BCSimulator < Thor
     end
   end
 
-  desc "send A B", "send A to B"
-  def send(a, b)
-    @@nodes[a].send(b)
+  desc "send A B X", "send A to B X coin"
+  def send(a, b, coin)
+    @@nodes[a.to_i].send(b, coin)
   end
 
   desc "exit", "exit this program."
