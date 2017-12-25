@@ -15,6 +15,13 @@ class Node
     txs.reject do |tx|
       @blockchain.used_as_input?(tx.hash)
     end
+
+    coins = 0
+    txs.each do |tx|
+      coins += tx.sum_of_coin_to(@id)
+    end
+		
+    coins
   end
 
   def send(target, coin)
@@ -60,4 +67,4 @@ class Node
       #{wallet(@id)}
     EOS
   end
-End
+end
