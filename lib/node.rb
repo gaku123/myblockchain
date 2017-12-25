@@ -25,10 +25,11 @@ class Node
   end
 
   def send(target, coin)
-    txs = wallet(@id)
-    txs.each do |tx|
-      puts "#{@id} to #{tx.hash} #{coin} coin"
+    txs = @blockchain.get_all_transaction_to(@id)
+    txs.reject do |tx|
+      @blockchain.used_as_input?(tx.hash)
     end
+
     input_coins = 0
     hashs = Array.new
     txs.each do |tx|
@@ -36,12 +37,14 @@ class Node
       hashs << tx.hash
       break if input_coins > coin.to_i
     end
+
+    return if input_coins < coin.to_i
+
     to_and_coin_values = [{to: target, coin_value: coin}]
     if (input_coins - coin.to_i) > 0
       to_and_coin_values << {to: @id, coin_value: (input_coins - coin.to_i).to_s}
     end
     tx = Transaction.create_transaction(hashs, to_and_coin_values)
-    puts tx.to_s
   end
 
   def receive_transaction(tx)
